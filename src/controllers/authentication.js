@@ -1,5 +1,7 @@
 const connectionFactory = require('../db/connection_factory')
 const userService = require('../services/user')
+const utils = require('../services/utils')
+const shortId = require('shortid')
 
 module.exports.login = (req, res, next) => {
   if (req.session.username) {
@@ -59,5 +61,35 @@ module.exports.confirmation = (req, res, next) => {
   userService.confirm(req.params.hash, (err) => {
     if (err) return next(err)
     res.send('Druido App Forum: Your account is confirmed with success!')
+  })
+}
+
+module.exports.forgotPassword = (req, res, next) => {
+  if (!req.body.email) {
+    return next({
+      message: 'Email not found. Field: (email)',
+      status: 400
+    })
+  }
+
+  const sql = QueryBuilder('dd_user') // eslint-disable-line
+    .where('email', req.body.email)
+    .select('id', 'email')
+    .toString()
+
+  connectionFactory.executeSql(sql, (err, result) => {
+    if (err) return next(err)
+    if (!result.rows[0]) return res.status(404).send('Account not found.')
+
+    const newPassword = shortId.generate()
+    userService.update(result.rows[0].id, {
+      password: newPassword
+    }, null, (err) => {
+      if (err) return next(err)
+      utils.sendEmailResetPassword(result.rows[0].email, newPassword, (err) => {
+        if (err) return next(err)
+        res.send('Password reseted, please check your email.')
+      })
+    })
   })
 }

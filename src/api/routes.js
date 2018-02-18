@@ -15,6 +15,7 @@ const isAuthenticated = require('../policies/is_authenticated')
 router.post('/login', auth.login)
 router.get('/logout', isAuthenticated, auth.logout)
 router.get('/confirmation/:hash', auth.confirmation)
+router.put('/forgot-password', auth.forgotPassword)
 
 router.post('/user', upload.single('image'), user.post)
 router.put('/user/:id', upload.single('image'), isAuthenticated, user.put)

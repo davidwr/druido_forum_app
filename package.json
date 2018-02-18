@@ -59,6 +59,7 @@
     "pg": "^6.1.2",
     "pgtools": "^0.2.3",
     "session-memory-store": "^0.2.2",
+    "shortid": "^2.2.8",
     "toobusy-js": "^0.5.1",
     "winston": "^2.3.0"
   },

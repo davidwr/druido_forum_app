@@ -104,14 +104,18 @@ const update = (id, user, image, callback) => {
     image: user.image
   }
 
-  const sql = QueryBuilder('dd_user') // eslint-disable-line
+  var sql = QueryBuilder('dd_user') // eslint-disable-line
     .where('id', id)
-    .andWhere('dd_user', user.dd_user)
     .update(userParsed)
     .returning('id')
-    .toString()
 
-  connectionFactory.executeSql(sql, (err, result) => {
+  if (user.dd_user) {
+    sql.andWhere('dd_user', user.dd_user)
+  }
+
+  const sqlDone = sql.toString()
+
+  connectionFactory.executeSql(sqlDone, (err, result) => {
     if (err) return callback(err)
     callback(null, result.rows[0])
   })
