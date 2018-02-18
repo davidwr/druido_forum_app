@@ -1,0 +1,24 @@
+var async = require('async')
+var execSql = require('../src/db/connection_factory').executeSql
+
+module.exports.up = (next) => {
+  async.eachSeries([
+    `
+    YOUR ARRAY UP SQL HERE
+    `
+  ], execSql, next)
+}
+
+module.exports.down = (next) => {
+  async.eachSeries(
+    [
+      `
+      YOUR ARRAY DOWN SQL HERE
+      `
+    ],
+    (sql, cb) => {
+      execSql(sql, () => cb())
+    },
+    next
+  )
+}

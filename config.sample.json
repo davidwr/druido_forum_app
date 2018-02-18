@@ -1,0 +1,24 @@
+{
+  "api": {
+    "port": 3001
+  },
+  "session_secret": "nx0lkp6jkeus0uf3xz93042klb22cpmpt777dwr",
+  "db": {
+    "adapter": "postgresql",
+    "host": "localhost",
+    "port": 5433,
+    "user": "postgres",
+    "password": "postgres",
+    "database": "druido",
+    "charset": "utf8"
+  },
+  "email": {
+    "username": "typeyourgmail@gmail.com",
+    "password": "yourpassword"
+  },
+  "https": {
+    "active": false,
+    "pfx": "./resources/https-certificate/druido_forum_app.com.pfx",
+    "port": 443
+  }
+}
