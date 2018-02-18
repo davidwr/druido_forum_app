@@ -47,14 +47,14 @@ module.exports.confirmation = (req, res, next) => {
   if (!req.params) {
     return next({
       message: 'Invalid confirmation link.',
-      status: 400
+      statusCode: 400
     })
   }
 
   if (!req.params.hash) {
     return next({
       message: 'Invalid confirmation link.',
-      status: 400
+      statusCode: 400
     })
   }
 
@@ -68,7 +68,7 @@ module.exports.forgotPassword = (req, res, next) => {
   if (!req.body.email) {
     return next({
       message: 'Email not found. Field: (email)',
-      status: 400
+      statusCode: 400
     })
   }
 
