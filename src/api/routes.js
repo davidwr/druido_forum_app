@@ -21,8 +21,8 @@ router.post('/user', upload.single('image'), user.post)
 router.put('/user/:id', upload.single('image'), isAuthenticated, user.put)
 router.get('/user/:id', isAuthenticated, user.get)
 
-router.get('/category', isAuthenticated, category.getAll)
-router.get('/category/:id', isAuthenticated, category.get)
+router.get('/category', category.getAll)
+router.get('/category/:id', category.get)
 
 router.post('/post', upload.single('image'), isAuthenticated, post.post)
 router.put('/post/:id', upload.single('image'), isAuthenticated, post.put)

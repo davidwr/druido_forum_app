@@ -1,4 +1,5 @@
 var pg = require('pg')
+require('../../bootstrap')
 
 var DataBase = new pg.Pool(CONFIG.db)
 
