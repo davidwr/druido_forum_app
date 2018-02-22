@@ -68,7 +68,7 @@ const create = (user, image, callback) => {
   connectionFactory.executeSql(sql, (err, result) => {
     if (err) return callback(err)
 
-    const link = 'http://localhost:3001/api/v1/confirmation/' + user.hash
+    const link = CONFIG.api.full_host + 'confirmation/' + user.hash
     utils.sendEmailConfirmation(user.email, link, (err, info) => {
       if (err) return callback(err)
       callback(null, result.rows[0])
