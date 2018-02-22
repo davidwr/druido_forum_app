@@ -1,6 +1,7 @@
 {
   "api": {
-    "port": 3001
+    "port": 3001,
+    "full_host": "http://ec2-18-220-34-186.us-east-2.compute.amazonaws.com:3001/api/v1/"
   },
   "session_secret": "nx0lkp6jkeus0uf3xz93042klb22cpmpt777dwr",
   "db": {

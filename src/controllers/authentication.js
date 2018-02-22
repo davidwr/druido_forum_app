@@ -19,7 +19,7 @@ module.exports.login = (req, res, next) => {
   const sql = QueryBuilder('dd_user') // eslint-disable-line
     .where('username', req.body.username)
     .andWhere('password', req.body.password)
-    .select('id', 'name', 'confirmed')
+    .select('id', 'name', 'confirmed', 'hash')
     .toString()
 
   connectionFactory.executeSql(sql, (err, result) => {

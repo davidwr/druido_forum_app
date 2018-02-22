@@ -1,14 +1,24 @@
 const connectionFactory = require('../db/connection_factory')
 
 module.exports = (req, res, next) => {
-  if (!req.session.username) {
+  if (!req.session.username && !req.body.token) {
     return res.status(401).send('Unauthorized.')
   }
 
-  const sql = QueryBuilder('dd_user') // eslint-disable-line
-    .where('username', req.session.username)
-    .select('id')
-    .toString()
+  var sql = ''
+  if (req.session.username) {
+    sql = QueryBuilder('dd_user') // eslint-disable-line
+      .where('username', req.session.username)
+      .select('id')
+      .toString()
+  }
+
+  if (req.body.token) {
+    sql = QueryBuilder('dd_user') // eslint-disable-line
+      .where('hash', req.body.token)
+      .select('id')
+      .toString()
+  }
 
   connectionFactory.executeSql(sql, (err, result) => {
     if (err) return next(err)
