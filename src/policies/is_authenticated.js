@@ -1,7 +1,7 @@
 const connectionFactory = require('../db/connection_factory')
 
 module.exports = (req, res, next) => {
-  if (!req.session.username && !req.body.token) {
+  if (!req.session.username && !req.headers['token']) {
     return res.status(401).send('Unauthorized.')
   }
 
@@ -13,9 +13,9 @@ module.exports = (req, res, next) => {
       .toString()
   }
 
-  if (req.body.token) {
+  if (req.headers['token']) {
     sql = QueryBuilder('dd_user') // eslint-disable-line
-      .where('hash', req.body.token)
+      .where('hash', req.headers['token'])
       .select('id')
       .toString()
   }
