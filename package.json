@@ -4,10 +4,8 @@
   "description": "A simple forum app.",
   "main": "app.js",
   "scripts": {
-    "start": "set NODE_ENV=development && nodemon app.js",
-    "android": "ionic cordova run android",
-    "update": "set NODE_ENV=development && npm install && npm prune && npm run db:migrate",
-    "production": "set NODE_ENV=production && node app.js",
+    "start": "nodemon app.js",
+    "update": "npm install && npm prune && npm run db:migrate",
     "test": "npm run lint && set NODE_ENV=test && mocha -R spec -t 30000 test/**/*.js",
     "coverage": "set NODE_ENV=test && istanbul cover ./node_modules/mocha/bin/_mocha -- -R dot -t 30000 test/**/*.js",
     "xunit": "set NODE_ENV=test && mocha --timeout 30000 -R xunit test/**/*.js > xunit.xml",
