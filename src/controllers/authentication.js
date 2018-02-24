@@ -60,7 +60,7 @@ module.exports.confirmation = (req, res, next) => {
 
   userService.confirm(req.params.hash, (err) => {
     if (err) return next(err)
-    res.send('Druido App Forum: Your account is confirmed with success!')
+    res.send('<h1>Druido APP Forum: Your account is confirmed with success! Return to the APP and log-in</h1>')
   })
 }
 

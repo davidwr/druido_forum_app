@@ -43,7 +43,7 @@ module.exports.up = (next) => {
     CREATE TABLE dd_comment (
       id serial PRIMARY KEY,
       message VARCHAR(300) NOT NULL,
-      dd_post integer REFERENCES dd_post(id) NOT NULL,
+      dd_post integer REFERENCES dd_post(id) ON DELETE CASCADE NOT NULL,
       dd_user integer REFERENCES dd_user(id) NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp
@@ -52,7 +52,7 @@ module.exports.up = (next) => {
     CREATE TABLE dd_relevance (
       id serial PRIMARY KEY,
       positive BOOLEAN NOT NULL,
-      dd_comment integer REFERENCES dd_comment(id) NOT NULL,
+      dd_comment integer REFERENCES dd_comment(id) ON DELETE CASCADE NOT NULL,
       dd_user integer REFERENCES dd_user(id) NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp,
@@ -62,7 +62,7 @@ module.exports.up = (next) => {
     CREATE TABLE dd_like (
       id serial PRIMARY KEY,
       liked BOOLEAN NOT NULL,
-      dd_post integer REFERENCES dd_post(id) NOT NULL,
+      dd_post integer REFERENCES dd_post(id) ON DELETE CASCADE NOT NULL,
       dd_user integer REFERENCES dd_user(id) NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp,

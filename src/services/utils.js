@@ -46,7 +46,7 @@ module.exports.sendEmailConfirmation = (email, link, callback) => {
     from: CONFIG.email.username,
     to: email,
     subject: 'Druido Forum App account confirmation!',
-    html: `<p>Please confirm your account cliking on link below.</p><br><a href="${link}">Confirmation link</a>`
+    html: `<h1>Please confirm your account cliking on link below.</h1><br><a href="${link}">Confirmation link</a>`
   }
 
   transporter.sendMail(mailOptions, function (err, info) {
