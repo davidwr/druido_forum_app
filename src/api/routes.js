@@ -39,5 +39,4 @@ router.get('/comment/post/:postId', isAuthenticated, comment.getByPost)
 
 router.put('/relevance', isAuthenticated, relevance.put)
 
-router.post('/like', isAuthenticated, like.post)
-router.put('/like/:id', isAuthenticated, like.put)
+router.put('/like', isAuthenticated, like.put)

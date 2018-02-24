@@ -38,21 +38,21 @@ const destroy = (req, res, next) => {
 }
 
 const getByCategory = (req, res, next) => {
-  postService.findByCategory(req.params.categoryId, (err, post) => {
+  postService.findByCategory(req.params.categoryId, req.query, (err, post) => {
     if (err) return next(err)
     res.status(200).send(post)
   })
 }
 
 const get = (req, res, next) => {
-  postService.find(req.params.id, (err, post) => {
+  postService.find(req.params.id, req.query, (err, post) => {
     if (err) return next(err)
     res.status(200).send(post)
   })
 }
 
 const getAll = (req, res, next) => {
-  postService.find(null, (err, post) => {
+  postService.find(null, req.query, (err, post) => {
     if (err) return next(err)
     res.status(200).send(post)
   })

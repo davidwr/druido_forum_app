@@ -1,14 +1,7 @@
 const likeService = require('../services/like')
 
-const post = (req, res, next) => {
-  likeService.create(req.body, (err, like) => {
-    if (err) return next(err)
-    res.status(202).send(like)
-  })
-}
-
 const put = (req, res, next) => {
-  likeService.update(req.params.id, req.body, (err, like) => {
+  likeService.upsert(req.body, (err, like) => {
     if (err) return next(err)
 
     if (!like) {
@@ -22,4 +15,4 @@ const put = (req, res, next) => {
   })
 }
 
-module.exports = { post, put }
+module.exports = { put }

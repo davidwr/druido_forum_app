@@ -107,6 +107,7 @@ const remove = (id, comment, callback) => {
 
 const find = (id, callback) => {
   var sql = QueryBuilder('dd_comment') // eslint-disable-line
+    .orderBy('created_at', 'asc')
     .select('*')
 
   if (id) {
@@ -138,6 +139,7 @@ const findByPost = (postId, callback) => {
       .where('dd_post', postId)
       .innerJoin('dd_user', 'dd_user.id', 'dd_comment.dd_user')
       .select('dd_comment.*', 'dd_user.name')
+      .orderBy('created_at', 'asc')
       .toString()
 
     connectionFactory.executeSql(sql, (err, result) => {
@@ -181,9 +183,20 @@ const findByPost = (postId, callback) => {
     }
   ], (err, results) => {
     if (err) return callback(err)
-    console.log(comments)
     callback(null, comments)
   })
 }
 
-module.exports = { create, update, remove, find, findByPost }
+const getCountCommentsByPost = (postId, callback) => {
+  const sql = QueryBuilder('dd_comment') // eslint-disable-line
+    .where('dd_post', postId)
+    .count('id')
+    .toString()
+
+  connectionFactory.executeSql(sql, (err, result) => {
+    if (err) return callback(err)
+    callback(null, result.rows[0].count)
+  })
+}
+
+module.exports = { create, update, remove, find, findByPost, getCountCommentsByPost }

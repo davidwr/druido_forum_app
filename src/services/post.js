@@ -1,6 +1,9 @@
 const moment = require('moment')
 const connectionFactory = require('../db/connection_factory')
 const utils = require('./utils')
+const likeService = require('./like')
+const commentService = require('./comment')
+const async = require('async')
 
 const create = (post, image, callback) => {
   if (!post) {
@@ -124,7 +127,7 @@ const remove = (id, post, callback) => {
   })
 }
 
-const find = (id, callback) => {
+const find = (id, filter, callback) => {
   var sql = QueryBuilder('dd_post') // eslint-disable-line
     .select('*')
 
@@ -132,19 +135,80 @@ const find = (id, callback) => {
     sql.where('id', id)
   }
 
+  if (filter) {
+    if (filter.recents) {
+      sql.orderBy('created_at', 'desc')
+    }
+  }
+
   sql = sql.toString()
-  connectionFactory.executeSql(sql, (err, result) => {
+
+  console.log(sql)
+
+  var posts = []
+  async.series([
+    (done) => {
+      connectionFactory.executeSql(sql, (err, result) => {
+        if (err) return done(err)
+        posts = result.rows
+        done()
+      })
+    },
+    (done) => {
+      async.each(posts, (post, doneEach) => {
+        likeService.getLikesByPost(post.id, (err, result) => {
+          if (err) return doneEach(err)
+          post.likes = result
+          doneEach()
+        })
+      }, (err) => {
+        if (err) return done(err)
+        done()
+      })
+    },
+    (done) => {
+      async.each(posts, (post, doneEach) => {
+        commentService.getCountCommentsByPost(post.id, (err, result) => {
+          if (err) return doneEach(err)
+          post.comments = result
+          doneEach()
+        })
+      }, (err) => {
+        if (err) return done(err)
+        done()
+      })
+    },
+    (done) => {
+      if (!filter) {
+        return done()
+      }
+
+      if (filter.most_rated) {
+        posts = posts.sort((a, b) => {
+          return parseInt(a.likes, 10) < parseInt(b.likes, 10)
+        })
+      }
+
+      if (filter.most_commented) {
+        posts = posts.sort((a, b) => {
+          return parseInt(a.comments, 10) < parseInt(b.comments, 10)
+        })
+      }
+
+      done()
+    }
+  ], (err) => {
     if (err) return callback(err)
 
     if (id) {
-      return callback(null, result.rows[0])
+      return callback(null, posts[0])
     }
 
-    callback(null, result.rows)
+    callback(null, posts)
   })
 }
 
-const findByCategory = (categoryId, callback) => {
+const findByCategory = (categoryId, filter, callback) => {
   if (!categoryId) {
     return callback({
       message: 'Category ID is null.',
@@ -155,11 +219,70 @@ const findByCategory = (categoryId, callback) => {
   var sql = QueryBuilder('dd_post') // eslint-disable-line
     .where('dd_category', categoryId)
     .select('*')
-    .toString()
 
-  connectionFactory.executeSql(sql, (err, result) => {
+  if (filter) {
+    if (filter.recents) {
+      sql.orderBy('created_at', 'desc')
+    }
+  }
+
+  sql = sql.toString()
+
+  var posts = []
+  async.series([
+    (done) => {
+      connectionFactory.executeSql(sql, (err, result) => {
+        if (err) return done(err)
+        posts = result.rows
+        done()
+      })
+    },
+    (done) => {
+      async.each(posts, (post, doneEach) => {
+        likeService.getLikesByPost(post.id, (err, result) => {
+          if (err) return doneEach(err)
+          post.likes = result
+          doneEach()
+        })
+      }, (err) => {
+        if (err) return done(err)
+        done()
+      })
+    },
+    (done) => {
+      async.each(posts, (post, doneEach) => {
+        commentService.getCountCommentsByPost(post.id, (err, result) => {
+          if (err) return doneEach(err)
+          post.comments = result
+          doneEach()
+        })
+      }, (err) => {
+        if (err) return done(err)
+        done()
+      })
+    },
+    (done) => {
+      if (!filter) {
+        return done()
+      }
+
+      if (filter.most_rated) {
+        posts = posts.sort((a, b) => {
+          return parseInt(a.likes, 10) < parseInt(b.likes, 10)
+        })
+      }
+
+      if (filter.most_commented) {
+        posts = posts.sort((a, b) => {
+          return parseInt(a.comments, 10) < parseInt(b.comments, 10)
+        })
+      }
+
+      done()
+    }
+  ], (err) => {
     if (err) return callback(err)
-    callback(null, result.rows)
+    callback(null, posts)
   })
 }
 
