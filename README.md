@@ -1,6 +1,6 @@
-# Druido Forum App
+# Druido Forum API
 
-A simple forum app.
+A simple forum API.
 
 ## Getting Started
 
