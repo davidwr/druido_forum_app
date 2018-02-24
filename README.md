@@ -4,21 +4,19 @@ A simple forum app.
 
 ## Getting Started
 
-First git clone the project or download it.
-Install NodeJS on your machine.
-Install Postgres SQL 10.
-
-Open a terminal/cmd as Administrator and call `npm install`.
-Create a postgres empty database with name: `druido`
-Run the command `npm run db:migrate` to execute the tables and inserts.
-Now open the `config.json` and configure with your e-mail, host, port and database.
-
-After all this, now execute `npm start`.
+- First git clone the project or download it.
+- Install NodeJS on your machine.
+- Install Postgres SQL 10.
+- Open a terminal/cmd as Administrator and call `npm install`.
+- Create a postgres empty database with name: `druido`
+- Run the command `npm run db:migrate` to execute the tables and inserts.
+- Now open the `config.json` and configure with your e-mail, host, port and database.
+- After all this, now execute `npm start`.
 
 ### Prerequisites
 
-Node JS v8.9.4
-Postgres SQL 10
+- Node JS v8.9.4
+- Postgres SQL 10
 
 ## Using the API
 
