@@ -40,7 +40,7 @@
   "author": "David William Rigamonte",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.1.4",
+    "async": "^2.6.0",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",

@@ -1,5 +1,7 @@
 const moment = require('moment')
 const connectionFactory = require('../db/connection_factory')
+const async = require('async')
+const relevance = require('./relevance')
 
 const create = (comment, image, callback) => {
   if (!comment) {
@@ -131,14 +133,56 @@ const findByPost = (postId, callback) => {
     })
   }
 
-  var sql = QueryBuilder('dd_comment') // eslint-disable-line
-    .where('dd_post', postId)
-    .select('*')
-    .toString()
+  function getComments (callback) {
+    let sql = QueryBuilder('dd_comment') // eslint-disable-line
+      .where('dd_post', postId)
+      .innerJoin('dd_user', 'dd_user.id', 'dd_comment.dd_user')
+      .select('dd_comment.*', 'dd_user.name')
+      .toString()
 
-  connectionFactory.executeSql(sql, (err, result) => {
+    connectionFactory.executeSql(sql, (err, result) => {
+      if (err) return callback(err)
+      callback(null, result.rows)
+    })
+  }
+
+  var comments = {}
+  async.series([
+    (done) => {
+      getComments((err, commentsResult) => {
+        if (err) return done(err)
+        comments = commentsResult
+        done()
+      })
+    },
+    (done) => {
+      async.each(comments, (comment, doneEach) => {
+        relevance.getCountPositiveByComment(comment.id, (err, result) => {
+          if (err) return doneEach(err)
+          comment.positives = result
+          doneEach()
+        })
+      }, (err) => {
+        if (err) return done(err)
+        done()
+      })
+    },
+    (done) => {
+      async.each(comments, (comment, doneEach) => {
+        relevance.getCountNegativeByComment(comment.id, (err, result) => {
+          if (err) return doneEach(err)
+          comment.negatives = result
+          doneEach()
+        })
+      }, (err) => {
+        if (err) return done(err)
+        done()
+      })
+    }
+  ], (err, results) => {
     if (err) return callback(err)
-    callback(null, result.rows)
+    console.log(comments)
+    callback(null, comments)
   })
 }
 

@@ -37,8 +37,7 @@ router.delete('/comment/:id', isAuthenticated, comment.destroy)
 router.get('/comment/:id', isAuthenticated, comment.get)
 router.get('/comment/post/:postId', isAuthenticated, comment.getByPost)
 
-router.post('/relevance', isAuthenticated, relevance.post)
-router.put('/relevance/:id', isAuthenticated, relevance.put)
+router.put('/relevance', isAuthenticated, relevance.put)
 
 router.post('/like', isAuthenticated, like.post)
 router.put('/like/:id', isAuthenticated, like.put)

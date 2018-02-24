@@ -1,14 +1,7 @@
 const relevanceService = require('../services/relevance')
 
-const post = (req, res, next) => {
-  relevanceService.create(req.body, (err, relevance) => {
-    if (err) return next(err)
-    res.status(202).send(relevance)
-  })
-}
-
 const put = (req, res, next) => {
-  relevanceService.update(req.params.id, req.body, (err, relevance) => {
+  relevanceService.upsert(req.body, (err, relevance) => {
     if (err) return next(err)
 
     if (!relevance) {
@@ -22,4 +15,4 @@ const put = (req, res, next) => {
   })
 }
 
-module.exports = { post, put }
+module.exports = { put }
