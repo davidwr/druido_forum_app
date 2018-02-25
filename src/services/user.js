@@ -110,7 +110,7 @@ const update = (id, user, image, callback) => {
     .returning('id')
 
   if (user.dd_user) {
-    sql.andWhere('dd_user', user.dd_user)
+    sql.andWhere('id', user.dd_user)
   }
 
   const sqlDone = sql.toString()
