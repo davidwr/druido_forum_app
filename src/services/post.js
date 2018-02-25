@@ -129,7 +129,8 @@ const remove = (id, post, callback) => {
 
 const find = (id, filter, callback) => {
   var sql = QueryBuilder('dd_post') // eslint-disable-line
-    .select('*')
+    .innerJoin('dd_user', 'dd_user.id', 'dd_post.dd_user')
+    .select('dd_post.*', 'dd_user.name')
 
   if (id) {
     sql.where('id', id)
@@ -218,7 +219,8 @@ const findByCategory = (categoryId, filter, callback) => {
 
   var sql = QueryBuilder('dd_post') // eslint-disable-line
     .where('dd_category', categoryId)
-    .select('*')
+    .innerJoin('dd_user', 'dd_user.id', 'dd_post.dd_user')
+    .select('dd_post.*', 'dd_user.name')
 
   if (filter) {
     if (filter.recents) {
