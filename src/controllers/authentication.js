@@ -4,10 +4,6 @@ const utils = require('../services/utils')
 const shortId = require('shortid')
 
 module.exports.login = (req, res, next) => {
-  if (req.session.username) {
-    return res.send('Already have a session running, please logout.')
-  }
-
   if (!req.body.username) {
     return res.status(400).send('Username has not informed.')
   }
