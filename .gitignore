@@ -2,3 +2,4 @@
 config.json
 /uploads
 .vscode
+.migrate
